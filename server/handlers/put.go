@@ -20,6 +20,11 @@ func (h *task) UpdateTask(rw http.ResponseWriter, r *http.Request) {
 
 	res, err := data.UpdateTask(id, req)
 	if err != nil {
+		if err == data.ErrTaskNotFound {
+			http.Error(rw, data.JsonError(err), http.StatusNotFound)
+			return
+		}
+
 		http.Error(rw, data.JsonError(data.ErrFailedToUpdate), http.StatusInternalServerError)
 		return
 	}

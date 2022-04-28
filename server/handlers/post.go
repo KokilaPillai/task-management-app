@@ -19,4 +19,6 @@ func (h *task) AddTask(rw http.ResponseWriter, r *http.Request) {
 		http.Error(rw, data.JsonError(data.ErrStructToJson), http.StatusInternalServerError)
 		return
 	}
+
+	rw.WriteHeader(http.StatusCreated)
 }

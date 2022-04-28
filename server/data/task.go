@@ -2,7 +2,6 @@ package data
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
 )
 
@@ -46,17 +45,49 @@ func GetTasks() (Tasks, error) {
 	return taskList, nil
 }
 
-func UpdateTask(id int, t *Task) (*Task, error) {
-	for _, item := range taskList {
+func findIndexByTaskId(id int) int {
+	for i, item := range taskList {
 		if item.ID == id {
-			item.Day = t.Day
-			item.Reminder = t.Reminder
-			item.Text = t.Text
-			return item, nil
+			return i
 		}
 	}
+	return -1
+}
 
-	return nil, fmt.Errorf("Task with id = %d not found", id)
+func UpdateTask(id int, t *Task) (*Task, error) {
+	index := findIndexByTaskId(id)
+
+	if index == -1 {
+		return nil, ErrTaskNotFound
+	}
+
+	taskList[index].Text = t.Text
+	taskList[index].Day = t.Day
+	taskList[index].Reminder = t.Reminder
+
+	return taskList[index], nil
+
+}
+
+func DeleteTask(id int) error {
+	index := findIndexByTaskId(id)
+
+	if index == -1 {
+		return ErrTaskNotFound
+	}
+
+	taskList = append(taskList[:index], taskList[index+1:]...)
+	return nil
+}
+
+func GetTask(id int) (*Task, error) {
+	index := findIndexByTaskId(id)
+
+	if index == -1 {
+		return nil, ErrTaskNotFound
+	}
+
+	return taskList[index], nil
 }
 
 var taskList = Tasks{
