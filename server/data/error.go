@@ -14,7 +14,9 @@ func JsonError(s string) string {
 	return string(d)
 }
 
-var ErrJsonToStruct = "Error while converting request Json to type Task."
-var ErrStructToJson = "Error while converting response to Json."
-var ErrFailedToInsert = "Error while trying to insert task in database."
-var ErrFailedToGet = "Error while trying to read data from database."
+var ErrJsonToStruct = "Error while converting request Json to type Task"
+var ErrStructToJson = "Error while converting response to Json"
+var ErrFailedToInsert = "Error while inserting task"
+var ErrFailedToGet = "Error while getting list of tasks"
+var ErrFailedToUpdate = "Error while updating task"
+var ErrInvalidUrlParameter = "Error invalid id received"

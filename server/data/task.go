@@ -2,6 +2,7 @@ package data
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 )
 
@@ -43,6 +44,19 @@ func AddTask(t *Task) (*Task, error) {
 
 func GetTasks() (Tasks, error) {
 	return taskList, nil
+}
+
+func UpdateTask(id int, t *Task) (*Task, error) {
+	for _, item := range taskList {
+		if item.ID == id {
+			item.Day = t.Day
+			item.Reminder = t.Reminder
+			item.Text = t.Text
+			return item, nil
+		}
+	}
+
+	return nil, fmt.Errorf("Task with id = %d not found", id)
 }
 
 var taskList = Tasks{

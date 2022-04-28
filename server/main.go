@@ -17,9 +17,11 @@ func main() {
 
 	post := m.Methods(http.MethodPost).Subrouter()
 	post.HandleFunc("/tasks", th.AddTask)
+	post.Use(th.RequestValidationMiddleware)
 
 	put := m.Methods(http.MethodPut).Subrouter()
 	put.HandleFunc("/tasks", th.UpdateTask)
+	put.Use(th.RequestValidationMiddleware)
 
 	s := &http.Server{
 		Addr:    ":4001",
