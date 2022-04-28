@@ -10,7 +10,7 @@ import (
 )
 
 func (h *task) UpdateTask(rw http.ResponseWriter, r *http.Request) {
-
+	h.l.Println("[INFO]\tReceived UpdateTasks")
 	id, err := strconv.Atoi(mux.Vars(r)["id"])
 	if err != nil {
 		http.Error(rw, data.JsonError(data.ErrInvalidUrlParameter), http.StatusInternalServerError)
@@ -19,7 +19,7 @@ func (h *task) UpdateTask(rw http.ResponseWriter, r *http.Request) {
 
 	req := r.Context().Value(&Request{}).(*data.Task)
 
-	res, err := data.UpdateTask(id, req)
+	res, err := h.r.UpdateTask(id, req)
 	if err != nil {
 		if err == data.ErrTaskNotFound {
 			http.Error(rw, data.JsonError(err), http.StatusNotFound)

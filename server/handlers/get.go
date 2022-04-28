@@ -10,7 +10,8 @@ import (
 )
 
 func (h *task) GetTasks(rw http.ResponseWriter, r *http.Request) {
-	tl, err := data.GetTasks()
+	h.l.Println("[INFO]\tReceived GetTasks")
+	tl, err := h.r.GetTasks()
 	if err != nil {
 		http.Error(rw, data.JsonError(data.ErrFailedToGet), http.StatusInternalServerError)
 		return
@@ -23,14 +24,14 @@ func (h *task) GetTasks(rw http.ResponseWriter, r *http.Request) {
 }
 
 func (h *task) GetTask(rw http.ResponseWriter, r *http.Request) {
-
+	h.l.Println("[INFO]\tReceived GetTask")
 	id, err := strconv.Atoi(mux.Vars(r)["id"])
 	if err != nil {
 		http.Error(rw, data.JsonError(data.ErrInvalidUrlParameter), http.StatusInternalServerError)
 		return
 	}
 
-	t, err := data.GetTask(id)
+	t, err := h.r.GetTask(id)
 	if err != nil {
 		if err == data.ErrTaskNotFound {
 			http.Error(rw, data.JsonError(err), http.StatusNotFound)

@@ -11,13 +11,14 @@ import (
 
 func (h *task) DeleteTask(rw http.ResponseWriter, r *http.Request) {
 
+	h.l.Println("[INFO]\tReceived DeleteTask")
 	id, err := strconv.Atoi(mux.Vars(r)["id"])
 	if err != nil {
 		http.Error(rw, data.JsonError(data.ErrInvalidUrlParameter), http.StatusInternalServerError)
 		return
 	}
 
-	err = data.DeleteTask(id)
+	err = h.r.DeleteTask(id)
 	if err != nil {
 		if err == data.ErrTaskNotFound {
 			http.Error(rw, data.JsonError(err), http.StatusNotFound)

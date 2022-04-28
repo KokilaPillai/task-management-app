@@ -8,6 +8,9 @@ import (
 	"os"
 
 	"github.com/ranefattesingh/task-management-app/server/handlers"
+	"github.com/ranefattesingh/task-management-app/server/repo"
+	"github.com/ranefattesingh/task-management-app/server/repo/mock"
+	"github.com/ranefattesingh/task-management-app/server/repo/sql"
 
 	"time"
 
@@ -16,8 +19,11 @@ import (
 )
 
 const (
-	PORT     = 5000
-	FRONTEND = 4200
+	PORT              = 5000
+	FRONTEND          = 4200
+	MOCK              = false
+	CONNECTION_POOL   = 10
+	CONNECTION_STRING = "./Task.db"
 )
 
 // "Origin", "Accept", "Content-Type", "X-Requested-With"
@@ -29,8 +35,15 @@ func main() {
 
 	l := log.New(os.Stdout, "TaskAPI: ", log.LstdFlags)
 
+	var r repo.Repository
+	if MOCK {
+		r = mock.NewMock()
+	} else {
+		r = sql.NewSql(CONNECTION_STRING, CONNECTION_POOL)
+	}
+
 	m := mux.NewRouter()
-	th := handlers.NewTaskHandler(l)
+	th := handlers.NewTaskHandler(l, r)
 
 	get := m.Methods(http.MethodGet).Subrouter()
 	get.HandleFunc("/tasks", th.GetTasks)

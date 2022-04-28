@@ -7,10 +7,10 @@ import (
 )
 
 func (h *task) AddTask(rw http.ResponseWriter, r *http.Request) {
-
+	h.l.Println("[INFO]\tReceived AddTasks")
 	req := r.Context().Value(&Request{}).(*data.Task)
 
-	res, err := data.AddTask(req)
+	res, err := h.r.AddTask(req)
 	if err != nil {
 		http.Error(rw, data.JsonError(data.ErrFailedToInsert), http.StatusInternalServerError)
 		return
