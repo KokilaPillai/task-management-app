@@ -7,19 +7,21 @@ import (
 	"net/http"
 	"os"
 	"tasktracker/server/handlers"
+
 	"time"
 
+	gohandlers "github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 )
 
-const PORT = 5000
+const PORT = 5001
 
 func main() {
 
 	l := log.New(os.Stdout, "TaskAPI: ", log.LstdFlags)
 
 	m := mux.NewRouter()
-	th := handlers.NewTaskHandler()
+	th := handlers.NewTaskHandler(l)
 
 	get := m.Methods(http.MethodGet).Subrouter()
 	get.HandleFunc("/tasks", th.GetTasks)
@@ -36,16 +38,26 @@ func main() {
 	delete := m.Methods(http.MethodDelete).Subrouter()
 	delete.HandleFunc("/tasks/{id:[0-9]+}", th.DeleteTask)
 
+	// CORS
+	// headersOk := gohandlers.AllowedHeaders([]string{"X-Requested-With"})
+	originsOk := gohandlers.AllowedOrigins([]string{"*"})
+	// methodsOk := gohandlers.AllowedMethods([]string{"GET", "HEAD", "POST", "PUT", "OPTIONS"})
+
+	ch := gohandlers.CORS(originsOk)
+
 	s := &http.Server{
 		Addr:         fmt.Sprintf(":%v", PORT),
-		Handler:      m,
+		Handler:      ch(m),
 		IdleTimeout:  120 * time.Second,
 		ReadTimeout:  1 * time.Second,
 		WriteTimeout: 1 * time.Second,
 	}
 
 	go func() {
-		s.ListenAndServe()
+		err := s.ListenAndServe()
+		if err != nil {
+			log.Fatal(err)
+		}
 	}()
 
 	signal := make(chan os.Signal)
