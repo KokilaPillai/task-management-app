@@ -6,8 +6,10 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test",
-    "server": "json-server --watch db.json --port 5000"
+    "test": "concurrently \"ng serve\" \"json-server --watch db.json --port 5000\"",
+    "server": "go run server/main.go",
+    "test-server": "json-server --watch db.json --port 5000",
+    "app": "concurrently \"ng serve\" \"go run server/main.go\""
   },
   "private": true,
   "dependencies": {

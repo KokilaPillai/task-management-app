@@ -1,4 +1,4 @@
-module tasktracker/server
+module github.com/ranefattesingh/task-management-app
 
 go 1.18
 

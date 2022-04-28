@@ -2,7 +2,8 @@ package handlers
 
 import (
 	"net/http"
-	"tasktracker/server/data"
+
+	"github.com/ranefattesingh/task-management-app/server/data"
 )
 
 func (h *task) AddTask(rw http.ResponseWriter, r *http.Request) {
@@ -15,10 +16,9 @@ func (h *task) AddTask(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	rw.WriteHeader(http.StatusCreated)
 	if err := res.ToJSON(rw); err != nil {
 		http.Error(rw, data.JsonError(data.ErrStructToJson), http.StatusInternalServerError)
 		return
 	}
-
-	rw.WriteHeader(http.StatusCreated)
 }

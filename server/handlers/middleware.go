@@ -3,7 +3,8 @@ package handlers
 import (
 	"context"
 	"net/http"
-	"tasktracker/server/data"
+
+	"github.com/ranefattesingh/task-management-app/server/data"
 )
 
 type Request struct{}
@@ -24,7 +25,6 @@ func (t *task) RequestValidationMiddleware(next http.Handler) http.Handler {
 		}
 
 		r = r.WithContext(context.WithValue(r.Context(), &Request{}, req))
-
 		next.ServeHTTP(rw, r)
 	})
 }

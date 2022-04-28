@@ -3,7 +3,8 @@ package handlers
 import (
 	"net/http"
 	"strconv"
-	"tasktracker/server/data"
+
+	"github.com/ranefattesingh/task-management-app/server/data"
 
 	"github.com/gorilla/mux"
 )

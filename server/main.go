@@ -6,7 +6,8 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"tasktracker/server/handlers"
+
+	"github.com/ranefattesingh/task-management-app/server/handlers"
 
 	"time"
 
@@ -14,7 +15,15 @@ import (
 	"github.com/gorilla/mux"
 )
 
-const PORT = 5001
+const (
+	PORT     = 5000
+	FRONTEND = 4200
+)
+
+// "Origin", "Accept", "Content-Type", "X-Requested-With"
+var AllowedHeaders = []string{"Content-Type", "X-Requested-With"}
+var AllowedOrigins = []string{fmt.Sprintf("http://localhost:%v", FRONTEND)}
+var AllowedMethods = []string{"GET", "HEAD", "POST", "PUT", "DELETE", "OPTIONS"}
 
 func main() {
 
@@ -39,11 +48,10 @@ func main() {
 	delete.HandleFunc("/tasks/{id:[0-9]+}", th.DeleteTask)
 
 	// CORS
-	// headersOk := gohandlers.AllowedHeaders([]string{"X-Requested-With"})
-	originsOk := gohandlers.AllowedOrigins([]string{"*"})
-	// methodsOk := gohandlers.AllowedMethods([]string{"GET", "HEAD", "POST", "PUT", "OPTIONS"})
-
-	ch := gohandlers.CORS(originsOk)
+	headersOk := gohandlers.AllowedHeaders(AllowedHeaders)
+	originsOk := gohandlers.AllowedOrigins(AllowedOrigins)
+	methodsOk := gohandlers.AllowedMethods(AllowedMethods)
+	ch := gohandlers.CORS(originsOk, headersOk, methodsOk)
 
 	s := &http.Server{
 		Addr:         fmt.Sprintf(":%v", PORT),

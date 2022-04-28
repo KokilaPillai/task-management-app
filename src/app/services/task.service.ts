@@ -14,7 +14,7 @@ const httpOptions = {
 })
 export class TaskService {
 
-  private apiUrl = 'http://localhost:5001/tasks'
+  private apiUrl = 'http://localhost:5000/tasks'
 
   constructor(private http: HttpClient) { }
 
@@ -22,7 +22,7 @@ export class TaskService {
     return this.http.get<Task[]>(this.apiUrl, httpOptions)
   }
 
-  deleteTask(task:Task): Observable<Task[]>{
+  deleteTask(task: Task): Observable<Task[]> {
     const url = `${this.apiUrl}/${task.id}`
     return this.http.delete<Task[]>(url, httpOptions)
   }
@@ -32,7 +32,7 @@ export class TaskService {
     return this.http.put<Task>(url, task, httpOptions)
   }
 
-  addTask(task: Task): Observable<Task>{
+  addTask(task: Task): Observable<Task> {
     return this.http.post<Task>(this.apiUrl, task, httpOptions)
   }
 }
