@@ -1,13 +1,22 @@
 package main
 
 import (
+	"context"
+	"fmt"
+	"log"
 	"net/http"
+	"os"
 	"tasktracker/server/handlers"
+	"time"
 
 	"github.com/gorilla/mux"
 )
 
+const PORT = 5000
+
 func main() {
+
+	l := log.New(os.Stdout, "TaskAPI: ", log.LstdFlags)
 
 	m := mux.NewRouter()
 	th := handlers.NewTaskHandler()
@@ -28,10 +37,20 @@ func main() {
 	delete.HandleFunc("/tasks/{id:[0-9]+}", th.DeleteTask)
 
 	s := &http.Server{
-		Addr:    ":4001",
-		Handler: m,
+		Addr:         fmt.Sprintf(":%v", PORT),
+		Handler:      m,
+		IdleTimeout:  120 * time.Second,
+		ReadTimeout:  1 * time.Second,
+		WriteTimeout: 1 * time.Second,
 	}
 
-	s.ListenAndServe()
-	// http.ListenAndServe(":4001", nil)
+	go func() {
+		s.ListenAndServe()
+	}()
+
+	signal := make(chan os.Signal)
+
+	l.Println("Received terminate, graceful shutdown", <-signal)
+	tc, _ := context.WithTimeout(context.Background(), 30*time.Second)
+	s.Shutdown(tc)
 }
