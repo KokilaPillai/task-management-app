@@ -25,3 +25,10 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+
+## Running Fullstack app
+Please note this feature requires golang v1.8.x installed on your machine
+while in task-management-app directory
+Run npm install -g concurrently
+Run npm install
+Run npm run app
