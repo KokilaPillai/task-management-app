@@ -1,4 +1,4 @@
-# AngularCrash
+# Task Management App
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.3.3.
 
@@ -26,6 +26,12 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
 
+## Mock server for frontend
+
+Run `npm install` <br>
+
+Run `npm run test-server`
+
 ## Running Fullstack app
 
 Please note this feature requires golang v1.8.x installed on your machine <br>
@@ -36,4 +42,6 @@ Run `npm install -g concurrently` <br>
 
 Run `npm install` <br>
 
-Run `npm run app`
+Run `npm run app` <br>
+
+Note that, now your frontend will be running on `localhost:4200` and your server will be running on `localhost:5000`
