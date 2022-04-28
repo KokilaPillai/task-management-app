@@ -3,11 +3,13 @@ package data
 import (
 	"encoding/json"
 	"io"
+
+	"github.com/go-playground/validator/v10"
 )
 
 type Task struct {
 	ID       int    `json:"id"`
-	Text     string `json:"text"`
+	Text     string `json:"text" validate:"required,gte=1"`
 	Day      string `json:"day"`
 	Reminder bool   `json:"reminder"`
 }
@@ -33,6 +35,11 @@ func (tl Tasks) getNextID() int {
 
 	t := tl[len(tl)-1]
 	return t.ID + 1
+}
+
+func (t *Task) Validate() error {
+	validate := validator.New()
+	return validate.Struct(t)
 }
 
 func AddTask(t *Task) (*Task, error) {

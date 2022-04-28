@@ -17,6 +17,11 @@ func (t *task) RequestValidationMiddleware(next http.Handler) http.Handler {
 		}
 
 		// Perform Validation here
+		err := req.Validate()
+		if err != nil {
+			http.Error(rw, data.JsonError(err), http.StatusBadRequest)
+			return
+		}
 
 		r = r.WithContext(context.WithValue(r.Context(), &Request{}, req))
 
